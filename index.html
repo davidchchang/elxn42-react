@@ -18,7 +18,7 @@
         getInitialState: function () {
           return {
             partyTitle: this.props.party.toUpperCase(),
-            partyResult: 25,
+            partyResult: 0,
             leftAdjust: 50,
             partyName: this.props.party
           };
@@ -27,7 +27,7 @@
         componentDidMount: function() {
           var progressWidth = this.refs.progressWrapper.offsetWidth;
           console.log(progressWidth);
-          var dynamicResult = .23;
+          var dynamicResult = .23 * this.state.partyResult;
           this.setState(function(state) {
             return {leftAdjust: Math.round(dynamicResult * progressWidth)};
           });
@@ -35,6 +35,7 @@
 
         render: function () {
           var className = 'progress-wrap progress progress-' + this.state.partyName;
+          console.log(this.state.partyTitle + ": "+ this.state.partyResult);
           return (<div className={className} ref="progressWrapper">
             <span className="progress-label">{this.state.partyTitle}</span>
             <div className="progress-bar progress" style={{left: this.state.leftAdjust}}></div>
@@ -52,17 +53,18 @@
             ndpElected: 0,
             greenElected: 0,
             bqElected: 0,
-            indElected: 0
+            indElected: 0,
+            otherElected: 0
           };
         },
 
         componentDidMount: function() {
           $.get(this.props.source, function(result) {
             var election = result["Election"];
-            console.log(result);
+            // console.log(result);
             if (this.isMounted()) {
               var leadingParties = election["Leading"]["Party"];
-              var liberals = 0, conservatives = 0, ndp = 0, green = 0, bq = 0, other = 0;
+              var liberals = 0, conservatives = 0, ndp = 0, green = 0, bq = 0, ind = 0, other = 0;
               for (var i = 0; i < leadingParties.length; i++) {
                 var electedCount = leadingParties[i]["Elected"];
                 var partyName = leadingParties[i]["Name"];
@@ -83,6 +85,9 @@
                     green = electedCount;
                     break;
                   case "IND":
+                    ind = electedCount;
+                    break;
+                  case "Others":
                     other = electedCount;
                     break;
                   default:
@@ -97,19 +102,21 @@
                 ndpElected: ndp,
                 greenElected: green,
                 bqElected: bq,
-                indElected: other
+                indElected: ind,
+                otherElected: other
               });
             }
           }.bind(this));
         },
 
         render: function () {
-          return (<div><Party party="conservative"></Party>
-            <Party party="liberal"></Party>
-            <Party party="ndp"></Party>
-            <Party party="green"></Party>
-            <Party party="bq"></Party>
-            <Party party="ind"></Party>
+          return (<div><Party party="conservative" partyResult="{this.state.conservativesElected}"></Party>
+            <Party party="liberal" partyResult="{this.state.liberalsElected}"></Party>
+            <Party party="ndp" partyResult="{this.state.ndpElected}"></Party>
+            <Party party="green" partyResult="{this.state.greenElected}"></Party>
+            <Party party="bq" partyResult="{this.state.bqElected}"></Party>
+            <Party party="ind" partyResult="{this.state.indElected}"></Party>
+            <Party party="other" partyResult="{this.state.otherElected}"></Party>
             <h2>Ridings Elected: {this.state.ridingsElected}</h2>
             <h2>Ridings Unelected: {this.state.ridingsUnelected}</h2></div>);
         }

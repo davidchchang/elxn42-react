@@ -23,7 +23,7 @@
 .progress-wrap.progress-bq {
   background: #093c71;
 }
-.progress-wrap.progress-ind {
+.progress-wrap.progress-ind, .progress-wrap.progress-other {
   background: gray;
 }
 .progress-wrap .progress-label {
