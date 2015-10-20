@@ -45,8 +45,8 @@
       var Parties = React.createClass({
         getInitialState: function () {
           return {
-            ridingsElected: 0,
-            ridingsUnelected: 0,
+            ridingsElected: "loading...",
+            ridingsUnelected: "loading...",
             conservative: 0,
             liberal: 0,
             ndp: 0,
@@ -61,7 +61,7 @@
             if (this.isMounted()) {
               this.setState({
                 ridingsElected: election["Ridings Elected"],
-                ridingsElected: election["Ridings Unelected"]
+                ridingsUnelected: election["Ridings Unelected"]
               });
             }
           }.bind(this));
@@ -76,9 +76,8 @@
             <h2>Ridings Unelected: {this.state.ridingsUnelected}</h2></div>);
         }
       });
-      var timestamp = Date.now();
       ReactDOM.render(
-        <Parties source="http://thecanadianpress-a.akamaihd.net/graphics/elections/federal/data/2015/federal/votes_results.json?{timestamp}" />,
+        <Parties source="http://elxn42.davidchchang.com/file_get_contents.php" />,
         document.getElementById('container')
       );
     </script>
