@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Basic Example with Click Counter</title>
-    <script src="build/react.js"></script>
-    <script src="build/react-dom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div id="container" align="center"></div>
+<head>
+  <meta charset="utf-8">
+  <title>#elxn42 live dashboard</title>
+  <script src="../../build/react.js"></script>
+  <script src="../../build/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<h1>#elxn42 live dashboard</h1>
+<div id="container" align="center"></div>
 
-    <script type="text/babel">
+<script type="text/babel">
       var Party = React.createClass({
         getInitialState: function () {
           return { 
             partyTitle: this.props.party.toUpperCase(),
             partyResult: 25,
-            leftAdjust: 346,
+            leftAdjust: 50,
             partyName: this.props.party
           };
         },
 
+        componentDidMount: function() {
+          var progressWidth = this.refs.progressWrapper.offsetWidth;
+          console.log(progressWidth);
+          var dynamicResult = .23;
+          this.setState(function(state) {
+            return {leftAdjust: Math.round(dynamicResult * progressWidth)};
+          });
+        },
+
         render: function () {
           var className = 'progress-wrap progress progress-' + this.state.partyName;
-          return (<div className={className} data-progress-percent="{this.state.partyResult}">
+          return (<div className={className} ref="progressWrapper">
             <span className="progress-label">{this.state.partyTitle}</span>
-            <div className="progress-bar progress" style={{left: this.state.leftAdjust + 'px'}}></div>
+            <div className="progress-bar progress" style={{left: this.state.leftAdjust}}></div>
           </div>);
         }
       });
@@ -51,5 +61,5 @@
         document.getElementById('container')
       );
     </script>
-  </body>
+</body>
 </html>
