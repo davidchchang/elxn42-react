@@ -36,6 +36,18 @@
   display: block;
   position: absolute;
 }
+
+.progress-wrap .progress-right-label {
+  font-family: Avenir;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 55px;
+  margin: auto 0px auto 20px;
+  color: black;
+  display: block;
+  position: absolute;
+  right: 100px;
+}
 .progress-wrap .progress-bar {
   background: #ddd;
   left: 0;

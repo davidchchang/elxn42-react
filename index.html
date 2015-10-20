@@ -21,7 +21,9 @@
             partyResult: this.props.partyResult,
             percentage: 0,
             partyName: this.props.party,
-            progressWidth: 0
+            progressWidth: 0,
+            seats: 0,
+            seatsLabel: "loading..."
           };
         },
 
@@ -34,16 +36,18 @@
 
         componentWillReceiveProps: function(nextProps) {
           this.setState({
-            percentage: nextProps.percentage
+            percentage: nextProps.percentage,
+            seatsLabel: nextProps.seatsWon + " seats"
           });
         },
 
         render: function () {
           var className = 'progress-wrap progress progress-' + this.state.partyName;
-          console.log(this.state.partyTitle + ": "+ this.state.percentage + " of " + this.state.progressWidth);
+          // console.log(this.state.partyTitle + ": "+ this.state.percentage + " of " + this.state.progressWidth);
           return (<div className={className} ref="progressWrapper">
             <span className="progress-label">{this.state.partyTitle}</span>
             <div className="progress-bar progress" style={{left: this.state.percentage * this.state.progressWidth}}></div>
+            <span className="progress-right-label">{this.state.seatsLabel}</span>
           </div>);
         }
       });
@@ -53,13 +57,20 @@
           return {
             ridingsElected: "loading...",
             ridingsUnelected: "loading...",
-            conservativesElected: 0,
-            liberalsElected: 0,
-            ndpElected: 0,
-            greenElected: 0,
-            bqElected: 0,
-            indElected: 0,
-            otherElected: 0
+            conservativeSeats: 0,
+            conservativesPercentage: 0,
+            liberalSeats: 0,
+            liberalsPercentage: 0,
+            ndpSeats: 0,
+            ndpPercentage: 0,
+            greenSeats: 0,
+            greenPercentage: 0,
+            bqSeats: 0,
+            bqPercentage: 0,
+            indSeats: 0,
+            indPercentage: 0,
+            otherSeats: 0,
+            otherPercentage: 0
           };
         },
 
@@ -105,13 +116,20 @@
                 self.setState({
                   ridingsElected: electedSoFar,
                   ridingsUnelected: election["Ridings Unelected"],
-                  conservativesElected: conservatives / electedSoFar,
-                  liberalsElected: liberals / electedSoFar,
-                  ndpElected: ndp / electedSoFar,
-                  greenElected: green /electedSoFar,
-                  bqElected: bq / electedSoFar,
-                  indElected: ind / electedSoFar,
-                  otherElected: other / electedSoFar
+                  conservativesPercentage: conservatives / electedSoFar,
+                  conservativeSeats: conservatives,
+                  liberalsPercentage: liberals / electedSoFar,
+                  liberalSeats: liberals,
+                  ndpPercentage: ndp / electedSoFar,
+                  ndpSeats: ndp,
+                  greenPercentage: green /electedSoFar,
+                  greenSeats: green,
+                  bqPercentage: bq / electedSoFar,
+                  bqSeats: bq,
+                  indPercentage: ind / electedSoFar,
+                  indSeats: ind,
+                  otherPercentage: other / electedSoFar,
+                  otherSeats: other
                 });
               }
             }.bind(self));
@@ -121,13 +139,13 @@
         },
 
         render: function () {
-          return (<div><Party party="conservative" percentage={this.state.conservativesElected}></Party>
-            <Party party="liberal" percentage={this.state.liberalsElected}></Party>
-            <Party party="ndp" percentage={this.state.ndpElected}></Party>
-            <Party party="green" percentage={this.state.greenElected}></Party>
-            <Party party="bq" percentage={this.state.bqElected}></Party>
-            <Party party="ind" percentage={this.state.indElected}></Party>
-            <Party party="other" percentage={this.state.otherElected}></Party>
+          return (<div><Party party="conservative" percentage={this.state.conservativesPercentage} seatsWon={this.state.conservativeSeats}></Party>
+            <Party party="liberal" percentage={this.state.liberalsPercentage} seatsWon={this.state.liberalSeats}></Party>
+            <Party party="ndp" percentage={this.state.ndpPercentage} seatsWon={this.state.ndpSeats}></Party>
+            <Party party="green" percentage={this.state.greenPercentage} seatsWon={this.state.greenSeats}></Party>
+            <Party party="bq" percentage={this.state.bqPercentage} seatsWon={this.state.bqSeats}></Party>
+            <Party party="ind" percentage={this.state.indPercentage} seatsWon={this.state.indSeats}></Party>
+            <Party party="other" percentage={this.state.otherPercentage} seatsWon={this.state.otherSeats}></Party>
             <h2>Ridings Elected: {this.state.ridingsElected}</h2>
             <h2>Ridings Unelected: {this.state.ridingsUnelected}</h2></div>);
         }
