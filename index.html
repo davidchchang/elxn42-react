@@ -19,26 +19,31 @@
           return {
             partyTitle: this.props.party.toUpperCase(),
             partyResult: this.props.partyResult,
-            leftAdjust: 50,
-            partyName: this.props.party
+            percentage: 0,
+            partyName: this.props.party,
+            progressWidth: 0
           };
         },
 
         componentDidMount: function() {
           var progressWidth = this.refs.progressWrapper.offsetWidth;
-          console.log(progressWidth);
-          var dynamicResult = .23 * this.state.partyResult;
-          this.setState(function(state) {
-            return {leftAdjust: Math.round(dynamicResult * progressWidth)};
+          this.setState({
+            progressWidth: progressWidth
+          });
+        },
+
+        componentWillReceiveProps: function(nextProps) {
+          this.setState({
+            percentage: nextProps.percentage
           });
         },
 
         render: function () {
           var className = 'progress-wrap progress progress-' + this.state.partyName;
-          console.log(this.state.partyTitle + ": "+ this.state.partyResult);
+          console.log(this.state.partyTitle + ": "+ this.state.percentage + " of " + this.state.progressWidth);
           return (<div className={className} ref="progressWrapper">
             <span className="progress-label">{this.state.partyTitle}</span>
-            <div className="progress-bar progress" style={{left: this.state.leftAdjust}}></div>
+            <div className="progress-bar progress" style={{left: this.state.percentage * this.state.progressWidth}}></div>
           </div>);
         }
       });
@@ -94,29 +99,31 @@
                     console.log("Unknown party: " + partyName);
                 }
               }
+              var electedSoFar = election["Ridings Elected"];
               this.setState({
-                ridingsElected: election["Ridings Elected"],
+                ridingsElected: electedSoFar,
                 ridingsUnelected: election["Ridings Unelected"],
-                conservativesElected: conservatives,
-                liberalsElected: liberals,
-                ndpElected: ndp,
-                greenElected: green,
-                bqElected: bq,
-                indElected: ind,
-                otherElected: other
+                conservativesElected: conservatives / electedSoFar,
+                liberalsElected: liberals / electedSoFar,
+                ndpElected: ndp / electedSoFar,
+                greenElected: green /electedSoFar,
+                bqElected: bq / electedSoFar,
+                indElected: ind / electedSoFar,
+                otherElected: other / electedSoFar
               });
+              console.log(this.state);
             }
           }.bind(this));
         },
 
         render: function () {
-          return (<div><Party party="conservative" partyResult={this.state.conservativesElected}></Party>
-            <Party party="liberal" partyResult={this.state.liberalsElected}></Party>
-            <Party party="ndp" partyResult={this.state.ndpElected}></Party>
-            <Party party="green" partyResult={this.state.greenElected}></Party>
-            <Party party="bq" partyResult={this.state.bqElected}></Party>
-            <Party party="ind" partyResult={this.state.indElected}></Party>
-            <Party party="other" partyResult={this.state.otherElected}></Party>
+          return (<div><Party party="conservative" percentage={this.state.conservativesElected}></Party>
+            <Party party="liberal" percentage={this.state.liberalsElected}></Party>
+            <Party party="ndp" percentage={this.state.ndpElected}></Party>
+            <Party party="green" percentage={this.state.greenElected}></Party>
+            <Party party="bq" percentage={this.state.bqElected}></Party>
+            <Party party="ind" percentage={this.state.indElected}></Party>
+            <Party party="other" percentage={this.state.otherElected}></Party>
             <h2>Ridings Elected: {this.state.ridingsElected}</h2>
             <h2>Ridings Unelected: {this.state.ridingsUnelected}</h2></div>);
         }
