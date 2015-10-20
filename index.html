@@ -47,10 +47,12 @@
           return {
             ridingsElected: "loading...",
             ridingsUnelected: "loading...",
-            conservative: 0,
-            liberal: 0,
-            ndp: 0,
-            green: 0
+            conservativesElected: 0,
+            liberalsElected: 0,
+            ndpElected: 0,
+            greenElected: 0,
+            bqElected: 0,
+            indElected: 0
           };
         },
 
@@ -59,9 +61,43 @@
             var election = result["Election"];
             console.log(result);
             if (this.isMounted()) {
+              var leadingParties = election["Leading"]["Party"];
+              var liberals = 0, conservatives = 0, ndp = 0, green = 0, bq = 0, other = 0;
+              for (var i = 0; i < leadingParties.length; i++) {
+                var electedCount = leadingParties[i]["Elected"];
+                var partyName = leadingParties[i]["Name"];
+                switch(partyName) {
+                  case "LIB":
+                    liberals = electedCount;
+                    break;
+                  case "CON":
+                    conservatives = electedCount;
+                    break;
+                  case "NDP":
+                    ndp = electedCount;
+                    break;
+                  case "BQ":
+                    bq = electedCount;
+                    break;
+                  case "GRN":
+                    green = electedCount;
+                    break;
+                  case "IND":
+                    other = electedCount;
+                    break;
+                  default:
+                    console.log("Unknown party: " + partyName);
+                }
+              }
               this.setState({
                 ridingsElected: election["Ridings Elected"],
-                ridingsUnelected: election["Ridings Unelected"]
+                ridingsUnelected: election["Ridings Unelected"],
+                conservativesElected: conservatives,
+                liberalsElected: liberals,
+                ndpElected: ndp,
+                greenElected: green,
+                bqElected: bq,
+                indElected: other
               });
             }
           }.bind(this));
@@ -72,6 +108,8 @@
             <Party party="liberal"></Party>
             <Party party="ndp"></Party>
             <Party party="green"></Party>
+            <Party party="bq"></Party>
+            <Party party="ind"></Party>
             <h2>Ridings Elected: {this.state.ridingsElected}</h2>
             <h2>Ridings Unelected: {this.state.ridingsUnelected}</h2></div>);
         }

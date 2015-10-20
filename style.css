@@ -20,6 +20,12 @@
 .progress-wrap.progress-green {
   background: #3f9b17;
 }
+.progress-wrap.progress-bq {
+  background: #093c71;
+}
+.progress-wrap.progress-ind {
+  background: gray;
+}
 .progress-wrap .progress-label {
   font-family: Avenir;
   font-weight: bold;
