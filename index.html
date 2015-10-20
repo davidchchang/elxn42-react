@@ -37,7 +37,7 @@
         componentWillReceiveProps: function(nextProps) {
           this.setState({
             percentage: nextProps.percentage,
-            seatsLabel: nextProps.seatsWon + " seats"
+            seatsLabel: nextProps.seatsWon + " seat" + (nextProps.seatsWon == 1 ? "" : "s")
           });
         },
 
