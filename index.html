@@ -14,6 +14,7 @@
 <div id="container" align="center"></div>
 
 <script type="text/babel">
+      var intervalId = 0;
       var Party = React.createClass({
         getInitialState: function () {
           return {
@@ -113,9 +114,10 @@
                   }
                 }
                 var electedSoFar = election["Ridings Elected"];
+                var electedRemaining = election["Ridings Unelected"];
                 self.setState({
                   ridingsElected: electedSoFar,
-                  ridingsUnelected: election["Ridings Unelected"],
+                  ridingsUnelected: electedRemaining,
                   conservativesPercentage: conservatives / electedSoFar,
                   conservativeSeats: conservatives,
                   liberalsPercentage: liberals / electedSoFar,
@@ -131,11 +133,14 @@
                   otherPercentage: other / electedSoFar,
                   otherSeats: other
                 });
+                if (electedRemaining == 0) {
+                  clearInterval(intervalId);
+                }
               }
             }.bind(self));
           };
           ajaxUpdate();
-          setInterval(ajaxUpdate, 30000);
+          intervalId = setInterval(ajaxUpdate, 30000);
         },
 
         render: function () {
