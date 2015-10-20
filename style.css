@@ -1,0 +1,38 @@
+.progress {
+  width: 100%;
+  height: 50px;
+}
+
+.progress-wrap {
+  margin: 20px 0;
+  overflow: hidden;
+  position: relative;
+}
+.progress-wrap.progress-ndp {
+  background: #f80;
+}
+.progress-wrap.progress-conservative {
+  background: #184687;
+}
+.progress-wrap.progress-liberal {
+  background: #d41d13;
+}
+.progress-wrap.progress-green {
+  background: #3f9b17;
+}
+.progress-wrap .progress-label {
+  font-family: Avenir;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 55px;
+  margin: auto 0px auto 20px;
+  color: #fff;
+  display: block;
+  position: absolute;
+}
+.progress-wrap .progress-bar {
+  background: #ddd;
+  left: 0;
+  position: absolute;
+  top: 0;
+}

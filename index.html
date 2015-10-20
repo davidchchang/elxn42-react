@@ -1,1 +1,55 @@
-Hello World
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example with Click Counter</title>
+    <script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div id="container" align="center"></div>
+
+    <script type="text/babel">
+      var Party = React.createClass({
+        getInitialState: function () {
+          return { 
+            partyTitle: this.props.party.toUpperCase(),
+            partyResult: 25,
+            leftAdjust: 346,
+            partyName: this.props.party
+          };
+        },
+
+        render: function () {
+          var className = 'progress-wrap progress progress-' + this.state.partyName;
+          return (<div className={className} data-progress-percent="{this.state.partyResult}">
+            <span className="progress-label">{this.state.partyTitle}</span>
+            <div className="progress-bar progress" style={{left: this.state.leftAdjust + 'px'}}></div>
+          </div>);
+        }
+      });
+
+      var Parties = React.createClass({
+        getInitialState: function () {
+          return {
+
+          };
+        },
+
+        render: function () {
+          
+          return (<div><Party party="conservative"></Party>
+            <Party party="liberal"></Party>
+            <Party party="ndp"></Party>
+            <Party party="green"></Party></div>);
+        }
+      });
+      ReactDOM.render(
+        <Parties />,
+        document.getElementById('container')
+      );
+    </script>
+  </body>
+</html>
