@@ -64,56 +64,60 @@
         },
 
         componentDidMount: function() {
-          $.get(this.props.source, function(result) {
-            var election = result["Election"];
-            // console.log(result);
-            if (this.isMounted()) {
-              var leadingParties = election["Leading"]["Party"];
-              var liberals = 0, conservatives = 0, ndp = 0, green = 0, bq = 0, ind = 0, other = 0;
-              for (var i = 0; i < leadingParties.length; i++) {
-                var electedCount = leadingParties[i]["Elected"];
-                var partyName = leadingParties[i]["Name"];
-                switch(partyName) {
-                  case "LIB":
-                    liberals = electedCount;
-                    break;
-                  case "CON":
-                    conservatives = electedCount;
-                    break;
-                  case "NDP":
-                    ndp = electedCount;
-                    break;
-                  case "BQ":
-                    bq = electedCount;
-                    break;
-                  case "GRN":
-                    green = electedCount;
-                    break;
-                  case "IND":
-                    ind = electedCount;
-                    break;
-                  case "Others":
-                    other = electedCount;
-                    break;
-                  default:
-                    console.log("Unknown party: " + partyName);
+          var self = this;
+          var ajaxUpdate = function() {
+            $.get(self.props.source, function(result) {
+              var election = result["Election"];
+              // console.log(result);
+              if (self.isMounted()) {
+                var leadingParties = election["Leading"]["Party"];
+                var liberals = 0, conservatives = 0, ndp = 0, green = 0, bq = 0, ind = 0, other = 0;
+                for (var i = 0; i < leadingParties.length; i++) {
+                  var electedCount = leadingParties[i]["Elected"];
+                  var partyName = leadingParties[i]["Name"];
+                  switch(partyName) {
+                    case "LIB":
+                      liberals = electedCount;
+                      break;
+                    case "CON":
+                      conservatives = electedCount;
+                      break;
+                    case "NDP":
+                      ndp = electedCount;
+                      break;
+                    case "BQ":
+                      bq = electedCount;
+                      break;
+                    case "GRN":
+                      green = electedCount;
+                      break;
+                    case "IND":
+                      ind = electedCount;
+                      break;
+                    case "Others":
+                      other = electedCount;
+                      break;
+                    default:
+                      console.log("Unknown party: " + partyName);
+                  }
                 }
+                var electedSoFar = election["Ridings Elected"];
+                self.setState({
+                  ridingsElected: electedSoFar,
+                  ridingsUnelected: election["Ridings Unelected"],
+                  conservativesElected: conservatives / electedSoFar,
+                  liberalsElected: liberals / electedSoFar,
+                  ndpElected: ndp / electedSoFar,
+                  greenElected: green /electedSoFar,
+                  bqElected: bq / electedSoFar,
+                  indElected: ind / electedSoFar,
+                  otherElected: other / electedSoFar
+                });
               }
-              var electedSoFar = election["Ridings Elected"];
-              this.setState({
-                ridingsElected: electedSoFar,
-                ridingsUnelected: election["Ridings Unelected"],
-                conservativesElected: conservatives / electedSoFar,
-                liberalsElected: liberals / electedSoFar,
-                ndpElected: ndp / electedSoFar,
-                greenElected: green /electedSoFar,
-                bqElected: bq / electedSoFar,
-                indElected: ind / electedSoFar,
-                otherElected: other / electedSoFar
-              });
-              console.log(this.state);
-            }
-          }.bind(this));
+            }.bind(self));
+          };
+          ajaxUpdate();
+          setInterval(ajaxUpdate, 30000);
         },
 
         render: function () {
